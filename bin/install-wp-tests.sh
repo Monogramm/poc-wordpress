@@ -51,6 +51,7 @@ else
 	fi
 	WP_TESTS_TAG="tags/$LATEST_VERSION"
 fi
+
 set -ex
 
 install_wp() {
@@ -150,6 +151,9 @@ install_db() {
 	mysqladmin create "$DB_NAME" --user="$DB_USER" --password="$DB_PASS" $EXTRA
 }
 
-install_wp
+if [[ "$DOCKER_TESTS" == 'true' ]]; then
+	install_wp
+	install_db
+fi
+
 install_test_suite
-install_db
