@@ -71,5 +71,5 @@ script:
       ./vendor/bin/phpcs
     fi
 
-env: # Environments
-  - TMPDIR=/tmp WP_TESTS_DIR=/tmp/wordpress-tests-lib WP_CORE_DIR=/srv/wordpress/html DOCKER_TESTS=false
+env: # Shared environment variables
+  - TMPDIR=/tmp WP_TESTS_DIR=/tmp/wordpress-tests-lib WP_CORE_DIR=/srv/wordpress/html DOCKER_TESTS=true
