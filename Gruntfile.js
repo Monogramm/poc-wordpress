@@ -9,7 +9,7 @@ module.exports = function( grunt ) {
 
 		addtextdomain: {
 			options: {
-				textdomain: "unit-tested-plugin",
+				textdomain: "event-plugin",
 			},
 			update_all_domains: {
 				options: {
@@ -32,8 +32,8 @@ module.exports = function( grunt ) {
 				options: {
 					domainPath: "/languages",
 					exclude: [ "\.git/*", "bin/*", "node_modules/*", "tests/*" ],
-					mainFile: "unit-tested-plugin.php",
-					potFilename: "unit-tested-plugin.pot",
+					mainFile: "event-plugin.php",
+					potFilename: "event-plugin.pot",
 					potHeaders: {
 						poedit: true,
 						"x-poedit-keywordslist": true
