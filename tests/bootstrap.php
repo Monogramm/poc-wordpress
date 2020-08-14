@@ -1,3 +1,4 @@
+<?php
 
 # tests/bootstrap.php
 
