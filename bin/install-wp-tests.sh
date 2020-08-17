@@ -7,10 +7,10 @@ fi
 
 ################################################################################
 
-DB_NAME=$1
-DB_USER=$2
-DB_PASS=$3
-DB_HOST=${4:-'localhost'}
+DB_NAME=${DB_NAME:-$1}
+DB_USER=${DB_USER:-$2}
+DB_PASS=${DB_PASS:-$3}
+DB_HOST=${DB_HOST:-${4:-'localhost'}}
 WP_VERSION=${5:-${WP_VERSION:-'latest'}}
 SKIP_DB_CREATE=${6:-'false'}
 

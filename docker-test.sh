@@ -30,6 +30,9 @@ fi
 
 cd "$PROJECT_DIR"
 
+echo "Install WP test deps..."
+/install-wp-tests.sh;
+
 echo "Install plugin deps..."
 composer install
 
