@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Events
-Description: A Plugin For Events ( Create, Read, Update & Delete ) 
+Plugin Name: POC WordPress
+Description: A Plugin For Managing Events ( Create, Read, Update & Delete ) 
 Author: Victoria Kovaleva
-Version: 1.0.0
+Version: 0.1.0
 */
 
 defined("ABSPATH") or die("Bad Access");

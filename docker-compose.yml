@@ -1,6 +1,35 @@
 version: "2.2"
 
 services:
+  sut:
+    build: .
+    depends_on:
+      wordpress:
+        condition: service_started
+      wordpressdb:
+        condition: service_healthy
+    volumes:
+      # To persist WP locally
+      - /srv/wordpress/html:/var/www/html
+      # To mount local plugin into WP
+      - .:/var/www/html/wp-content/plugins/${WP_PLUGIN}
+      # To persist WP tests lib
+      #- /srv/wordpress/tests-lib:/tmp/wordpress-tests-lib
+    environment:
+      - WAIT_FOR_DB=true
+      - DB_HOST=${WORDPRESS_ADMIN_LOGIN}
+      - PROJECT_DIR=/var/www/html/wp-content/plugins/${WP_PLUGIN}
+      # WordPress tests config
+      - DB_NAME=${WORDPRESS_DB_NAME}
+      - DB_USER=${WORDPRESS_DB_USER}
+      - DB_PASS=${WORDPRESS_DB_PWD}
+      - DB_HOST=wordpressdb:3306
+      - WP_VERSION=${WP_VERSION}
+      - TMPDIR=/tmp
+      - WP_TESTS_DIR=/tmp/wordpress-tests-lib
+      - WP_CORE_DIR=/var/www/html
+      - WP_PLUGIN=${WP_PLUGIN}
+
   wordpress:
     # https://hub.docker.com/repository/docker/monogramm/docker-wordpress
     image: monogramm/docker-wordpress:${WP_VERSION}-apache
@@ -17,7 +46,7 @@ services:
       # To persist WP locally
       - /srv/wordpress/html:/var/www/html
       # To mount local plugin into WP
-      - .:/var/www/html/wp-content/plugins/poc-wordpress
+      - .:/var/www/html/wp-content/plugins/${WP_PLUGIN}
     environment:
       # Site Config
       - WORDPRESS_USERNAME=${WORDPRESS_ADMIN_LOGIN}

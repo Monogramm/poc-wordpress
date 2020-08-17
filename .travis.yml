@@ -35,41 +35,15 @@ jobs:
     - php: 7.2
       env: WP_VERSION=5.3
 
+install:
+  - docker-compose build
+
 before_script:
-  - |
-    if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
-      phpenv config-rm xdebug.ini
-    else
-      echo "xdebug.ini does not exist"
-    fi
-  - |
-    if [[ ! -z "$DOCKER_TESTS" ]] ; then
-      docker-compose up -d
-    fi
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      composer install
-      bash bin/install-wp-tests.sh wordpress_test root '' localhost "$WP_VERSION"
-      composer global require "phpunit/phpunit=7.*"
-      ./vendor/bin/phpunit --version
-    fi
-  - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      composer global require wp-coding-standards/wpcs
-      ./vendor/bin/phpcs --config-set installed_paths ./vendor/wp-coding-standards/wpcs
-    fi
+  - docker-compose up -d
 
 script:
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      ./vendor/bin/phpunit --version
-      ./vendor/bin/phpunit
-      WP_MULTISITE=1 ./vendor/bin/phpunit
-    fi
-  - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      ./vendor/bin/phpcs
-    fi
-
-env: # Shared environment variables
-  - TMPDIR=/tmp WP_TESTS_DIR=/tmp/wordpress-tests-lib WP_CORE_DIR=/srv/wordpress/html DOCKER_TESTS=true
+  - docker-compose ps
+  - echo "Wait until tests are done" && sleep 180
+  - docker-compose ps
+  - docker-compose logs sut
+  - docker-compose ps sut | grep exit 0

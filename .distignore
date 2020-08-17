@@ -2,11 +2,14 @@
 .babelrc
 .deployignore
 .distignore
+.dockerignore
 .editorconfig
 .eslintignore
 .eslintrc
 .git
+.gitattributes
 .gitignore
+.gitmoji-changelogrc
 .gitlab-ci.yml
 .travis.yml
 .DS_Store
@@ -17,6 +20,9 @@ bin
 .circleci/config.yml
 composer.json
 composer.lock
+docker-compose.yml
+docker-*.sh
+Dockerfile
 dependencies.yml
 Gruntfile.js
 package.json
