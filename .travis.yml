@@ -12,7 +12,6 @@ notifications:
 
 branches:
   only:
-    - ci/travis
     - master
 
 cache:
