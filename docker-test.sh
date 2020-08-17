@@ -23,14 +23,24 @@ wait_for_db
 echo "Waiting to ensure everything is fully ready for the tests..."
 sleep 60
 
-if [ ! -d "$PLUGIN_DIR" ]; then
-	echo "No plugin to test found at '$PLUGIN_DIR'!"
+if [ ! -d "$PROJECT_DIR" ]; then
+	echo "No project to test found at '$PROJECT_DIR'!"
     exit 1
 fi
 
-cd "$PLUGIN_DIR"
+cd "$PROJECT_DIR"
 
 echo "Install plugin deps..."
 composer install
 
-phpunit .
+echo "Trigger PHPUnit tests..."
+./vendor/bin/phpunit
+
+echo "Trigger PHPUnit tests with WP in multisite mode..."
+WP_MULTISITE=1 ./vendor/bin/phpunit
+
+echo "Trigger PHP Code Sniffer..."
+./vendor/bin/phpcs
+
+echo "Tests successful. Check logs for details."
+return 0

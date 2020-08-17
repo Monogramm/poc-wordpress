@@ -12,11 +12,16 @@ services:
       # To persist WP locally
       - /srv/wordpress/html:/var/www/html
       # To mount local plugin into WP
-      - .:/var/www/html/wp-content/plugins/event-plugin
+      - .:/var/www/html/wp-content/plugins/poc-wordpress
     environment:
       - WAIT_FOR_DB=true
       - DB_HOST=${WORDPRESS_ADMIN_LOGIN}
-      - PLUGIN_DIR=/var/www/html/wp-content/plugins/event-plugin
+      - PROJECT_DIR=/var/www/html/wp-content/plugins/poc-wordpress
+      # WordPress tests config
+      - WP_VERSION=${WP_VERSION}
+      - TMPDIR=/tmp
+      - WP_TESTS_DIR=/tmp/wordpress-tests-lib
+      - WP_CORE_DIR=/srv/wordpress/html
 
   wordpress:
     # https://hub.docker.com/repository/docker/monogramm/docker-wordpress
