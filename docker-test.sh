@@ -30,20 +30,32 @@ fi
 
 cd "$PROJECT_DIR"
 
+echo " "
+echo "========"
 echo "Install WP test deps..."
 /install-wp-tests.sh;
 
+echo " "
+echo "========"
 echo "Install plugin deps..."
 composer install
 
+echo " "
+echo "========"
 echo "Trigger PHPUnit tests..."
 ./vendor/bin/phpunit
 
+echo " "
+echo "========"
 echo "Trigger PHPUnit tests with WP in multisite mode..."
 WP_MULTISITE=1 ./vendor/bin/phpunit
 
+echo " "
+echo "========"
 echo "Trigger PHP Code Sniffer..."
 ./vendor/bin/phpcs
 
+echo " "
+echo "========"
 echo "Tests successful. Check logs for details."
 return 0
