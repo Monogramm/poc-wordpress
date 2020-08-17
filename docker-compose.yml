@@ -34,7 +34,7 @@ services:
       # To persist WP locally
       - /srv/wordpress/html:/var/www/html
       # To mount local plugin into WP
-      - .:/var/www/html/wp-content/plugins/event-plugin
+      - .:/var/www/html/wp-content/plugins/poc-wordpress
     environment:
       # Site Config
       - WORDPRESS_USERNAME=${WORDPRESS_ADMIN_LOGIN}
