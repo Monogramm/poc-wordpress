@@ -29,7 +29,6 @@ services:
       - WP_TESTS_DIR=/tmp/wordpress-tests-lib
       - WP_CORE_DIR=/var/www/html
       - WP_PLUGIN=${WP_PLUGIN}
-      - WP_TESTS_PLUGIN=${WP_PLUGIN}.php
 
   wordpress:
     # https://hub.docker.com/repository/docker/monogramm/docker-wordpress
