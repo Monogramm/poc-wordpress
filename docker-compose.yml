@@ -3,7 +3,7 @@ version: "2.2"
 services:
   wordpress:
     # https://hub.docker.com/repository/docker/monogramm/docker-wordpress
-    image: monogramm/docker-wordpress:5.3-apache
+    image: monogramm/docker-wordpress:${WP_VERSION}-apache
     container_name: wordpress
     #restart: always
     depends_on:
@@ -13,8 +13,10 @@ services:
       - wordpressdb
     ports:
      - "8080:80"
-    # To persist WP locally
     volumes:
+      # To persist WP locally
+      - /srv/wordpress/html:/var/www/html
+      # To mount local plugin into WP
       - .:/var/www/html/wp-content/plugins/event-plugin
     environment:
       # Site Config

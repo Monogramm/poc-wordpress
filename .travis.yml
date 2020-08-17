@@ -1,6 +1,8 @@
 os: linux
 dist: bionic
 
+services: docker
+
 language: php
 
 notifications:
@@ -41,25 +43,33 @@ before_script:
       echo "xdebug.ini does not exist"
     fi
   - |
+    if [[ ! -z "$DOCKER_TESTS" ]] ; then
+      docker-compose up -d
+    fi
+  - |
     if [[ ! -z "$WP_VERSION" ]] ; then
       composer install
-      bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+      bash bin/install-wp-tests.sh wordpress_test root '' localhost "$WP_VERSION"
       composer global require "phpunit/phpunit=7.*"
-      phpunit --version
+      ./vendor/bin/phpunit --version
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
       composer global require wp-coding-standards/wpcs
-      phpcs --config-set installed_paths ./vendor/wp-coding-standards/wpcs
+      ./vendor/bin/phpcs --config-set installed_paths ./vendor/wp-coding-standards/wpcs
     fi
 
 script:
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
-      phpunit
-      WP_MULTISITE=1 phpunit
+      ./vendor/bin/phpunit --version
+      ./vendor/bin/phpunit
+      WP_MULTISITE=1 ./vendor/bin/phpunit
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      phpcs
+      ./vendor/bin/phpcs
     fi
+
+env: # Shared environment variables
+  - TMPDIR=/tmp WP_TESTS_DIR=/tmp/wordpress-tests-lib WP_CORE_DIR=/srv/wordpress/html DOCKER_TESTS=true
