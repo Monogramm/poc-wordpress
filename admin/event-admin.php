@@ -173,9 +173,9 @@ class eventsAdmin extends eventsCrud{
      * @access   public
 	 */
     public function add_pages_to_menu(){
-        add_menu_page('Events', 'Events', 'manage_options', 'new-event', array($this,'add_event_output'),'dashicons-megaphone' );
-        add_submenu_page('new-event', 'Events', 'New Event', 'manage_options', 'new-event', array($this,'add_event_output'));
-        add_submenu_page('new-event', 'Events', 'All Events', 'manage_options', 'view-events', array($this,'all_events_output') );
+        add_menu_page('Events', 'Events', 'manage_options', 'view-events', array($this,'all_events_output'),'dashicons-megaphone' );
+        add_submenu_page('view-events', 'Events', 'All Events', 'manage_options', 'view-events', array($this,'all_events_output') );
+        add_submenu_page('view-events', 'Events', 'New Event', 'manage_options', 'new-event', array($this,'add_event_output'));
         add_submenu_page('wp-admin', 'Events', 'Edit Events', 'manage_options', 'edit-event', array($this,'edit_event_output') );
         
         add_action( 'admin_init', array($this,'register_plugin_settings'));
