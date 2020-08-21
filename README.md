@@ -71,6 +71,13 @@ The `sut` container will run:
 
 You can also check Travis-CI [![Build Status](https://travis-ci.org/Monogramm/poc-wordpress.svg)](https://travis-ci.org/Monogramm/poc-wordpress) for the latest tests results.
 
+
+To reset your test environment, you can just drop the containers and the persisted data:
+```sh
+docker-compose down
+rm -rf /srv/wordpress
+```
+
 <!--
 [TODO] If project is deployed to DockerHub:
 
