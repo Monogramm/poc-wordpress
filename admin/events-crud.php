@@ -110,6 +110,11 @@ class eventsCrud extends event_controller{
               $messageError = $validatedData;
           }
       }
+
+      if (isset($messageSuccess)) {
+        return $this->all_events_output(['messageSuccess' => $messageSuccess]);
+    }
+      
       // get view    
       require_once(PLUGIN_PATH_INCLUDES_ADMIN.'new_entry.php');
 
@@ -355,13 +360,16 @@ class eventsCrud extends event_controller{
 	 * @since    1.0.0
      * @access   public
 	 */
-    public function all_events_output() {
+    public function all_events_output($data = []) {
       // load EntryListTable
       require_once(PLUGIN_PATH_ADMIN."EntryListTable.php");    
-      $table = new EntryListTable($this->tableName);
+      $table = new EntryListTable($this->tableName, $this->tagesTable);
       // prepare items
       $table->prepare_items();
       echo '<h4>View Events</h4>';
+      if (isset($data['messageSuccess'])) {
+        echo "<div class='alert alert-success'><strong>".$data['messageSuccess']."</strong></div>";
+      }
       echo '<form action="" method="GET">';
       echo '<input type="hidden" name="page" value="'.$_REQUEST['page'].'"/>';   
       $table->search_box( 'search', 'search_id' );

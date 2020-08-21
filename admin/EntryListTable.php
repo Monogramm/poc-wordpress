@@ -1,5 +1,6 @@
 <?php
 defined("ABSPATH") or die("Bad Access");
+define( 'WP_DEBUG', true );
 
 
 if (!class_exists('WP_List_Table')) {
@@ -10,13 +11,16 @@ class EntryListTable extends WP_List_Table {
     
     private $tableName;
 
-    function __construct($tableName) {
+    private $tagesTable;
+
+    function __construct($tableName, $tagesTable) {
       global $status, $page;
       parent::__construct(array(
         'singular' => 'Entry Data',
         'plural' => 'Entry Datas',
       ));
         $this->tableName = $tableName;
+        $this->tagesTable = $tagesTable;
     }
     /*Set Data To My Table*/
     function column_default($item, $column_name) {
@@ -71,7 +75,8 @@ class EntryListTable extends WP_List_Table {
             $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
             if (is_array($ids)) $ids = implode(',', $ids);
             if (!empty($ids)) {
-                $wpdb->query("DELETE FROM $this->tableName  WHERE id IN($ids)");
+              $wpdb->query("DELETE FROM $this->tagesTable WHERE event_id IN($ids)");
+              $wpdb->query("DELETE FROM $this->tableName  WHERE id IN($ids)");
                 echo "<div class='alert alert-success'>Items Deleted</div>";
             }
         }
