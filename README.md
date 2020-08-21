@@ -3,7 +3,7 @@
 [![gitmoji-changelog](https://img.shields.io/badge/Changelog-gitmoji-blue.svg)](https://github.com/frinyvonnick/gitmoji-changelog)
 [![Managed with Taiga.io](https://img.shields.io/badge/Managed%20with-TAIGA.io-709f14.svg)](https://tree.taiga.io/project/monogrammbot-monogrammpoc-wordpress/ "Managed with Taiga.io")
 [![Build Status](https://travis-ci.org/Monogramm/poc-wordpress.svg)](https://travis-ci.org/Monogramm/poc-wordpress)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/34921e8a9c4e45f599438db801f57779)](https://www.codacy.com/gh/Monogramm/poc-wordpress?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Monogramm/poc-wordpress&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/34921e8a9c4e45f599438db801f57779)](https://www.codacy.com/gh/Monogramm/poc-wordpress?utm_source=github.com&utm_medium=referral&utm_content=Monogramm/poc-wordpress&utm_campaign=Badge_Grade)
 [![GitHub stars](https://img.shields.io/github/stars/Monogramm/poc-wordpress?style=social)](https://github.com/Monogramm/poc-wordpress)
 
 <!--
@@ -57,9 +57,19 @@ echo "[TODO] Describe how to use application"
 
 ## :white_check_mark: Run tests
 
+You can use the docker-compose file to execute the tests:
+
 ```sh
-echo "[TODO] Describe how to execute Unit Tests"
+docker-compose up -d
+docker-compose logs -f sut
 ```
+
+The `sut` container will run:
+
+-   PHPUnit for this plugin
+-   PHPCS for Code quality
+
+You can also check Travis-CI [![Build Status](https://travis-ci.org/Monogramm/poc-wordpress.svg)](https://travis-ci.org/Monogramm/poc-wordpress) for the latest tests results.
 
 <!--
 [TODO] If project is deployed to DockerHub:
