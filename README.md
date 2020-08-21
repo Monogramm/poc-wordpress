@@ -45,9 +45,15 @@ See [Taiga.io](https://tree.taiga.io/project/monogrammbot-monogrammpoc-wordpress
 
 ## :construction: Install
 
+You can build the WordPress plugin zip file using the following command:
+
 ```sh
-echo "[TODO] Describe how to install application"
+./bin/generate-plugin-zip.sh 'poc-wordpress'
 ```
+
+You can then manually install the plugin your WordPress.
+
+Alternatively, you can use the docker test environment. Check tests section for details.
 
 ## :rocket: Usage
 
@@ -71,8 +77,8 @@ The `sut` container will run:
 
 You can also check Travis-CI [![Build Status](https://travis-ci.org/Monogramm/poc-wordpress.svg)](https://travis-ci.org/Monogramm/poc-wordpress) for the latest tests results.
 
-
 To reset your test environment, you can just drop the containers and the persisted data:
+
 ```sh
 docker-compose down
 rm -rf /srv/wordpress

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-cd ..
-zip -FSrq "${WP_PLUGIN}" . -x "vendor/*" ".*" "*.md" "docker-compose*"
+zip -FSrq "${WP_PLUGIN:-${1}}" . -x "vendor/*" ".*" "*.md" "*.sh" "docker-compose*" "Dockerfile"
 
