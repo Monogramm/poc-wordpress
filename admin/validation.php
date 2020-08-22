@@ -7,11 +7,12 @@ defined("ABSPATH") or die("Bad Access");
  *
  * when validate user data there is two output
  *  1 - if data passed -> return array with success data
- *  2 - otherwise return error 
+ *  2 - otherwise return error
  * @since      1.0.0
  */
 
-class validation{
+class validation
+{
     // Validation Array
     private $data;
     // The Form Data Like $_POST['']
@@ -22,18 +23,18 @@ class validation{
     private $errorName;
     // Error
     private $error = array();
-    // If The Data Validation Is True Return Array 
+    // If The Data Validation Is True Return Array
     private $dataSuccess = array();
     // result
     private $result = array();
-	// validation vars
-	private $validationVars;
-	// this var for get user rules as string 
-	private $rules;
-	// this var for get rules as array
-	private $rules_Array = array();
-	// this var for check if user want return all errors or first error only
-	private $continue_on_error;
+    // validation vars
+    private $validationVars;
+    // this var for get user rules as string
+    private $rules;
+    // this var for get rules as array
+    private $rules_Array = array();
+    // this var for check if user want return all errors or first error only
+    private $continue_on_error;
     /**
      *  __construct
      *
@@ -43,11 +44,12 @@ class validation{
      *  @return    (non)
      *
      */
-    public function __construct($data,$continue_on_error = FALSE) {
+    public function __construct($data, $continue_on_error = false)
+    {
         $this->data = $data;
         $this->continue_on_error = $continue_on_error;
     }
-	
+
     /**
      * checkStatus
      *
@@ -62,28 +64,28 @@ class validation{
      *  @access   private
      *
      */
-    private function checkStatus($errorName,$val,$property)
+    private function checkStatus($errorName, $val, $property)
     {
-		
-        switch(strtolower($property)):
-           case "required":
-             return ($this->checkNotNull($val))?TRUE:$this->result['error'][] = "The Field Of ".$errorName." is Required";
-           break;
-           case "number":
-             return ($this->checkNumber($val))?TRUE:$this->result['error'][] =  "The Field Of ".$errorName." Must Be Only Numbers";
-           break;
-           case (preg_match('/(max-length)\[(.*)\]/', $property, $match) == TRUE):
-             return ($this->checkMaxLength($val,$match[2]))?TRUE:$this->result['error'][] = "The Max Length of ".$errorName." Is ".$match[2]." ";;
-           break;
-           case (preg_match('/(min-length)\[(.*)\]/', $property, $match) == TRUE):
-             return ($this->checkMinLength($val,$match[2]))?TRUE:$this->result['error'][] = "The Min Length of ".$errorName." Is ".$match[2]." ";;
+
+        switch (strtolower($property)):
+        case "required":
+            return ($this->checkNotNull($val)) ? true : $this->result['error'][] = "The Field Of " . $errorName . " is Required";
         break;
-		default:
-		  return NULL;
+        case "number":
+            return ($this->checkNumber($val)) ? true : $this->result['error'][] = "The Field Of " . $errorName . " Must Be Only Numbers";
+        break;
+        case (preg_match('/(max-length)\[(.*)\]/', $property, $match) == true):
+            return ($this->checkMaxLength($val, $match[2])) ? true : $this->result['error'][] = "The Max Length of " . $errorName . " Is " . $match[2] . " ";;
+        break;
+        case (preg_match('/(min-length)\[(.*)\]/', $property, $match) == true):
+            return ($this->checkMinLength($val, $match[2])) ? true : $this->result['error'][] = "The Min Length of " . $errorName . " Is " . $match[2] . " ";;
+        break;
+        default:
+            return NULL;
         endswitch;
     }
-    
-	/**
+
+    /**
      * Validator
      *
      *  Validate User Data
@@ -92,109 +94,122 @@ class validation{
      *  @since    1.0.0
      *  @access   public
      */
-	public function validator()
+    public function validator()
     {
-        foreach($this->data as $key=>$value)
-		{
-			// Check If The User Added The Value Key And errorName To His Array
-			if(array_key_exists("value",$value) && array_key_exists("errorName",$value))
-			{
-				// set The Data Like Tha Value Of $_POST['username']
-				  $this->dataValue = strip_tags($value['value']);
-				 // desired field Name in Case Of Success
-				  $this->fieldName = $key;
-				  // desired Error Name in Case Of Error
-				  $this->errorName = $value['errorName'];
-				 // check if develper set rules
-				 if(array_key_exists("rules",$value))
-				 {
-					 $this->rules = $value['rules'];
-					 // set rules as array
-					 $this->set_rules_array();
-					 foreach($this->rules_Array as $property)
-					 {
-						 $dataStatus = $this->checkStatus($this->errorName,$this->dataValue,$property);
-							// if Error Happend When Check User Data Retrun FALSE
-						  if($dataStatus !== TRUE && $dataStatus !== NULL)
-							{
-							  // if user want stop and return first happend error
-							    if($this->continue_on_error == FALSE)
-							    {
-								    return $this->get_result();
-								    break 2; 
-							     }
-							 // if user add invalid validation attribute 
-							}elseif($dataStatus == NULL){
-                                die("Error : The Attribute ".$property." Not Found Please Check Validation Class");
-                                exit;
-							}else{
-                              // Set The Data If No Error Happend
-				              $this->result["success"][$this->fieldName] = $this->dataValue; 
-                          }
-				 		}
-					// if user not add any rules add data to success array    
-				   }else{
-				       $this->result["success"][$this->fieldName] = $this->dataValue;
-					   continue;
-				   }
-			 }
-			 // If User Did Not Add The Value and errorName To His Array
-			 else
-			 {
-				 $this->result['error'] = "Please Add The value Key And errorName Key To Your ".$key." Array";
-				 return $this->get_result();
-			 }
-		}
-        if(array_key_exists("error",$this->result))
-		{
-			// if there is success data remove it to return error
-			if(array_key_exists("success",$this->result))
-			{
-				unset($this->result['success']);
-			}
-			return $this->get_result();
-		}else{
-			return $this->get_result();
-		}
+        foreach ($this->data as $key => $value)
+        {
+            // Check If The User Added The Value Key And errorName To His Array
+            if (array_key_exists("value", $value) && array_key_exists("errorName", $value))
+            {
+                // set The Data Like Tha Value Of $_POST['username']
+                $this->dataValue = strip_tags($value['value']);
+                // desired field Name in Case Of Success
+                $this->fieldName = $key;
+                // desired Error Name in Case Of Error
+                $this->errorName = $value['errorName'];
+                // check if develper set rules
+                if (array_key_exists("rules", $value))
+                {
+                    $this->rules = $value['rules'];
+                    // set rules as array
+                    $this->set_rules_array();
+                    foreach ($this->rules_Array as $property)
+                    {
+                        $dataStatus = $this->checkStatus($this->errorName, $this->dataValue, $property);
+                        // if Error Happend When Check User Data Retrun FALSE
+                        if ($dataStatus !== true && $dataStatus !== NULL)
+                        {
+                            // if user want stop and return first happend error
+                            if ($this->continue_on_error == false)
+                            {
+                                return $this->get_result();
+                                break 2;
+                            }
+                            // if user add invalid validation attribute
+                            
+                        }
+                        elseif ($dataStatus == NULL)
+                        {
+                            die("Error : The Attribute " . $property . " Not Found Please Check Validation Class");
+                            exit;
+                        }
+                        else
+                        {
+                            // Set The Data If No Error Happend
+                            $this->result["success"][$this
+                                ->fieldName] = $this->dataValue;
+                        }
+                    }
+                    // if user not add any rules add data to success array
+                    
+                }
+                else
+                {
+                    $this->result["success"][$this
+                        ->fieldName] = $this->dataValue;
+                    continue;
+                }
+            }
+            // If User Did Not Add The Value and errorName To His Array
+            else
+            {
+                $this->result['error'] = "Please Add The value Key And errorName Key To Your " . $key . " Array";
+                return $this->get_result();
+            }
+        }
+        if (array_key_exists("error", $this->result))
+        {
+            // if there is success data remove it to return error
+            if (array_key_exists("success", $this->result))
+            {
+                unset($this->result['success']);
+            }
+            return $this->get_result();
+        }
+        else
+        {
+            return $this->get_result();
+        }
     }
     /**
-	 *  set user rules
-	 *
-	 *  explode rules string to array
+     *  set user rules
      *
-	 *  @since    1.0.0
+     *  explode rules string to array
+     *
+     *  @since    1.0.0
      *  @access   private
-	 */
-	private function set_rules_array()
-	{
-		if(isset($this->rules) && !empty($this->rules))
-		{
-			// explode roule
-			 $this->rules_Array = explode("|",$this->rules);
-			return;
-		}
-		return NULL;
-	}
-    
+     */
+    private function set_rules_array()
+    {
+        if (isset($this->rules) && !empty($this->rules))
+        {
+            // explode roule
+            $this->rules_Array = explode("|", $this->rules);
+            return;
+        }
+        return NULL;
+    }
+
     /**
      *  get_result
      *
      *  get validation result
      *  @param     (none)
      *  @return (array) the result from validation
-	 *  @since    1.0.0
-     *  @access   public     
+     *  @since    1.0.0
+     *  @access   public
      *
      */
     public function get_result()
     {
-		if(array_key_exists('error',$this->result) && $this->continue_on_error == FALSE)
-		{
-			return $this->result['error'][0];
-		}else if(array_key_exists('error',$this->result) && $this->continue_on_error == TRUE)
-		{
-			return $this->result;
-		}
+        if (array_key_exists('error', $this->result) && $this->continue_on_error == false)
+        {
+            return $this->result['error'][0];
+        }
+        else if (array_key_exists('error', $this->result) && $this->continue_on_error == true)
+        {
+            return $this->result;
+        }
         return $this->result;
     }
 
@@ -207,12 +222,12 @@ class validation{
      *  @since    1.0.0
      *  @access   private
      */
-     private function checkNumber($var)
-     {
-         $pattern = "/^([\d])+$/";
-         return (preg_match($pattern,$var))?TRUE:FALSE;
-     }
-    
+    private function checkNumber($var)
+    {
+        $pattern = "/^([\d])+$/";
+        return (preg_match($pattern, $var)) ? true : false;
+    }
+
     /**
      *  checkNotNull
      *
@@ -222,11 +237,11 @@ class validation{
      *  @since    1.0.0
      *  @access   private
      */
-      private function checkNotNull($var)
-      {
-         return(!empty($var))?TRUE:FALSE;
-      }
-    
+    private function checkNotNull($var)
+    {
+        return (!empty($var)) ? true : false;
+    }
+
     /**
      *  checkMaxLength
      *
@@ -237,16 +252,16 @@ class validation{
      *  @since    1.0.0
      *  @access   private
      */
-      private function checkMaxLength($name,$maxNumber)
-      {
-          if($this->checkNumber($maxNumber) == TRUE)
-          {
-              return (mb_strlen($name, 'UTF-8') <= $maxNumber)?TRUE:FALSE;
-          }
-          return FALSE;
-      }
-    
-     /**
+    private function checkMaxLength($name, $maxNumber)
+    {
+        if ($this->checkNumber($maxNumber) == true)
+        {
+            return (mb_strlen($name, 'UTF-8') <= $maxNumber) ? true : false;
+        }
+        return false;
+    }
+
+    /**
      *  checkMinLength
      *  check if The variable >= Min length
      *  @param    $name (Unknown_Type) The Data That Will Be Checked
@@ -255,17 +270,15 @@ class validation{
      *  @since    1.0.0
      *  @access   private
      */
-      private function checkMinLength($name,$minNumber)
-      {
-          if($this->checkNumber($minNumber) == TRUE)
-          {
-             return (mb_strlen($name, 'UTF-8') >= $minNumber)?TRUE:FALSE; 
-          }
-          return FALSE;
-      }
+    private function checkMinLength($name, $minNumber)
+    {
+        if ($this->checkNumber($minNumber) == true)
+        {
+            return (mb_strlen($name, 'UTF-8') >= $minNumber) ? true : false;
+        }
+        return false;
+    }
 
 }
-
-
 
 ?>

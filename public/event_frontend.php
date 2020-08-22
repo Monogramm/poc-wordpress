@@ -1,19 +1,18 @@
 <?php
 defined("ABSPATH") or die("Bad Access");
 
-
 /*
  *require controller Class class
- */
+*/
 
-require_once(PLUGIN_PATH_ADMIN."event_controller.php");
+require_once (PLUGIN_PATH_ADMIN . "event_controller.php");
 
 /*
  * class event_frontend
  * this class Used For Deal With Frontend
  *
  * @since      1.0.0
- */
+*/
 
 class event_frontend extends event_controller
 {
@@ -36,7 +35,8 @@ class event_frontend extends event_controller
         // get post name
         $page_slug = $post->post_name;
         // check post name
-        if ($page_slug == 'my_events') {
+        if ($page_slug == 'my_events')
+        {
             $page_template = PLUGIN_PATH_INCLUDES_PUBLIC . 'page_template.php';
         }
         return $page_template;
@@ -60,7 +60,8 @@ class event_frontend extends event_controller
         $past_events_option = get_option('past_events');
         // preparing sql query
         $sql = "SELECT * FROM $this->tableName ";
-        if ($past_events_option != 'yes') {
+        if ($past_events_option != 'yes')
+        {
             $sql .= "WHERE `date` >= " . $todayData;
         }
         global $wpdb;
@@ -68,3 +69,4 @@ class event_frontend extends event_controller
         return $allevents;
     }
 }
+

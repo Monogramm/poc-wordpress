@@ -1,52 +1,60 @@
 <?php
 defined("ABSPATH") or die("Bad Access");
 
-
 // require Crud Class class
-require_once(PLUGIN_PATH_ADMIN."events-crud.php");
+require_once (PLUGIN_PATH_ADMIN . "events-crud.php");
 /**
  * eventsAdmin class
- *
  * this class manage admin pages
- *
  * @since      1.0.0
  */
 
-class eventsAdmin extends eventsCrud{
-    
-    
-    /**
-	 * Define constract to control the plugin
-	 *
-	 * load css files
-	 * load js files
-	 * add pages to admin menu
-     *
-	 * @since    1.0.0
-	 */
-    public function __construct(){
-               
-        // Load Css Files
-        add_action( 'admin_enqueue_scripts', array($this,'load_custom_css'));
-        // Load Js Files
-        add_action( 'admin_enqueue_scripts', array($this,'load_custom_js'));
-        // Add Pages To Admin menu
-        add_action('admin_menu', array($this,'add_pages_to_menu'));
-        add_action('admin_menu',  array($this,'registerOptionPage')); 
-        
-    }
-    
-    /**
-	 * Define activate function
-	 *
-     * create plugin main table
-	 * create plugin events tags table
-     
-	 * @since    1.0.0
-     * @access   public
-	 */
-    public static function activate(){
+class eventsAdmin extends eventsCrud
+{
 
+    /**
+     * Define constract to control the plugin
+     * load css files
+     * load js files
+     * add pages to admin menu
+     * @since    1.0.0
+     */
+
+    public function __construct()
+    {
+
+        // Load Css Files
+        add_action('admin_enqueue_scripts', array(
+            $this,
+            'load_custom_css'
+        ));
+        // Load Js Files
+        add_action('admin_enqueue_scripts', array(
+            $this,
+            'load_custom_js'
+        ));
+        // Add Pages To Admin menu
+        add_action('admin_menu', array(
+            $this,
+            'add_pages_to_menu'
+        ));
+        add_action('admin_menu', array(
+            $this,
+            'registerOptionPage'
+        ));
+
+    }
+
+    /**
+     * Define activate function
+     * create plugin main table
+     * create plugin events tags table
+     * @since    1.0.0
+     * @access   public
+     */
+
+    public static function activate()
+    {
         $obj = new eventsAdmin();
         // create Plugin Main Table
         $obj->create_plugin_main_table();
@@ -54,43 +62,43 @@ class eventsAdmin extends eventsCrud{
         $obj->create_plugin_events_tags_table();
         // create new wp-post
         $obj->create_new_post();
-       
+
     }
-    
+
     /**
-	 * Define deactivate function
-	 *
-	 * flush rewrite rules
-     *
-	 * @since    1.0.0
+     * Define deactivate function
+     * flush rewrite rules
+     * @since    1.0.0
      * @access   public
-	 */
-    public function deactivate(){
+     */
+
+    public function deactivate()
+    {
         //flush rewrite rules
         flush_rewrite_rules();
-        // delete data from post and option tables 
-        if(!empty(get_option("event_page_id")))
+        // delete data from post and option tables
+        if (!empty(get_option("event_page_id")))
         {
             // get page id (option)
             $page_id = get_option("event_page_id");
             // delete post
-            wp_delete_post($page_id,true);
+            wp_delete_post($page_id, true);
             // delete option
             delete_option("event_page_id");
         }
     }
 
     /**
-	 * Define create plugin main table function
-	 *
-	 * this function used for create main table 
-     *
-	 * @since    1.0.0
+     * Define create plugin main table function
+     * this function used for create main table
+     * @since    1.0.0
      * @access   private
-	 */
-    private function create_plugin_main_table(){
+     */
+
+    private function create_plugin_main_table()
+    {
         global $wpdb;
-        
+
         $charset_collate = $wpdb->get_charset_collate();
         // create Event Table Sql Query
         $sql = "CREATE TABLE IF NOT EXISTS $this->tableName(
@@ -104,22 +112,23 @@ class eventsAdmin extends eventsCrud{
                 `event_category` varchar(255),
                 PRIMARY KEY  (id)
         ) $charset_collate;";
-        
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
+
+        require_once (ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
     }
-    
+
     /**
-	 * Define create plugin events tags function
-	 *
-	 * this function used for create events tags table 
+     * Define create plugin events tags function
      *
-	 * @since    1.0.0
+     * this function used for create events tags table
+     *
+     * @since    1.0.0
      * @access   private
-	 */
-    private function create_plugin_events_tags_table(){
+     */
+    private function create_plugin_events_tags_table()
+    {
         global $wpdb;
-        
+
         $charset_collate = $wpdb->get_charset_collate();
         // create Event Tags Table Sql Query
         $sql = "CREATE TABLE IF NOT EXISTS $this->tagesTable(
@@ -129,151 +138,174 @@ class eventsAdmin extends eventsCrud{
                 PRIMARY KEY  (id),
                 FOREIGN KEY (event_id) REFERENCES $this->tableName (id)
         ) $charset_collate;";
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
-         
+        require_once (ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+
     }
-    
+
     /**
-	 * Define drop main table function
-	 *
-	 * this function used for drop main table 
+     * Define drop main table function
      *
-	 * @since    1.0.0
+     * this function used for drop main table
+     *
+     * @since    1.0.0
      * @access   private
-	 */
-    private function drop_plugin_main_table() {
+     */
+    private function drop_plugin_main_table()
+    {
         global $wpdb;
 
         $sql = "DROP TABLE IF EXISTS $this->tableName";
         $wpdb->query($sql);
     }
-    
+
     /**
-	 * Define drop main table function
-	 *
-	 * this function used for drop main table 
+     * Define drop main table function
      *
-	 * @since    1.0.0
+     * this function used for drop main table
+     *
+     * @since    1.0.0
      * @access   private
-	 */
-    private function drop_plugin_events_tags_table() {
+     */
+    private function drop_plugin_events_tags_table()
+    {
         global $wpdb;
 
         $sql = "DROP TABLE IF EXISTS $this->tagesTable";
         $wpdb->query($sql);
     }
-    
+
     /**
-	 * add pages to menu
-	 *
-	 * this function used for add pages to admin menu 
+     * add pages to menu
      *
-	 * @since    1.0.0
+     * this function used for add pages to admin menu
+     *
+     * @since    1.0.0
      * @access   public
-	 */
-    public function add_pages_to_menu(){
-        add_menu_page('Events', 'Events', 'manage_options', 'view-events', array($this,'all_events_output'),'dashicons-megaphone' );
-        add_submenu_page('view-events', 'Events', 'All Events', 'manage_options', 'view-events', array($this,'all_events_output') );
-        add_submenu_page('view-events', 'Events', 'New Event', 'manage_options', 'new-event', array($this,'add_event_output'));
-        add_submenu_page('wp-admin', 'Events', 'Edit Events', 'manage_options', 'edit-event', array($this,'edit_event_output') );
-        
-        add_action( 'admin_init', array($this,'register_plugin_settings'));
+     */
+    public function add_pages_to_menu()
+    {
+        add_menu_page('Events', 'Events', 'manage_options', 'view-events', array(
+            $this,
+            'all_events_output'
+        ) , 'dashicons-megaphone');
+        add_submenu_page('view-events', 'Events', 'All Events', 'manage_options', 'view-events', array(
+            $this,
+            'all_events_output'
+        ));
+        add_submenu_page('view-events', 'Events', 'New Event', 'manage_options', 'new-event', array(
+            $this,
+            'add_event_output'
+        ));
+        add_submenu_page('wp-admin', 'Events', 'Edit Events', 'manage_options', 'edit-event', array(
+            $this,
+            'edit_event_output'
+        ));
+
+        add_action('admin_init', array(
+            $this,
+            'register_plugin_settings'
+        ));
     }
 
     /**
-	 * register option page
-	 *
-	 * this function used for add configration page to settings
+     * register option page
      *
-	 * @since    1.0.0
+     * this function used for add configration page to settings
+     *
+     * @since    1.0.0
      * @access   public
-	 */
-    function registerOptionPage() {
-      add_options_page('Events Plugin Settings', 'Events Plugin', 'manage_options', 'EventPluginSettings', array($this,'render_settings_page'));
+     */
+    function registerOptionPage()
+    {
+        add_options_page('Events Plugin Settings', 'Events Plugin', 'manage_options', 'EventPluginSettings', array(
+            $this,
+            'render_settings_page'
+        ));
     }
-    
+
     /**
-	 * load css files
-	 *
-	 * load plugin admin css files
+     * load css files
      *
-	 * @since    1.0.0
+     * load plugin admin css files
+     *
+     * @since    1.0.0
      * @access   public
-	 */
-    public function load_custom_css() {
-      wp_register_style( 'bootstrap_css', PLUGIN_URL_VENDOR.'/bootstrap-3.3.6-dist/css/bootstrap.min.css');
-      wp_enqueue_style( 'bootstrap_css' );
-      wp_register_style( 'tags_css', PLUGIN_URL_VENDOR.'/tag/tag.css');
-      wp_enqueue_style( 'tags_css' );
+     */
+    public function load_custom_css()
+    {
+        wp_register_style('bootstrap_css', PLUGIN_URL_VENDOR . '/bootstrap-3.3.6-dist/css/bootstrap.min.css');
+        wp_enqueue_style('bootstrap_css');
+        wp_register_style('tags_css', PLUGIN_URL_VENDOR . '/tag/tag.css');
+        wp_enqueue_style('tags_css');
     }
-    
+
     /**
-	 * load js files
-	 *
-	 * load plugin admin js files
+     * load js files
      *
-	 * @since    1.0.0
+     * load plugin admin js files
+     *
+     * @since    1.0.0
      * @access   public
-	 */
-    public function load_custom_js() {
-      wp_enqueue_script( 'jquery_js', PLUGIN_URL_VENDOR. '/jquery.js' );
-      wp_enqueue_script( 'bootstrap_js', PLUGIN_URL_VENDOR. '/bootstrap-3.3.6-dist/js/bootstrap.min.js' );
-      wp_enqueue_script( 'tag_js', PLUGIN_URL_VENDOR. '/tag/tag.js' );
+     */
+    public function load_custom_js()
+    {
+        wp_enqueue_script('jquery_js', PLUGIN_URL_VENDOR . '/jquery.js');
+        wp_enqueue_script('bootstrap_js', PLUGIN_URL_VENDOR . '/bootstrap-3.3.6-dist/js/bootstrap.min.js');
+        wp_enqueue_script('tag_js', PLUGIN_URL_VENDOR . '/tag/tag.js');
 
     }
-    
+
     /**
-	 * register settings
-	 *
-	 * register plugin settings
+     * register settings
      *
-	 * @since    1.0.0
+     * register plugin settings
+     *
+     * @since    1.0.0
      * @access   public
-	 */
-    public function register_plugin_settings(){
-        register_setting("EventPluginSettings",'past_events');
-        register_setting("EventPluginSettings",'events_per_page');
+     */
+    public function register_plugin_settings()
+    {
+        register_setting("EventPluginSettings", 'past_events');
+        register_setting("EventPluginSettings", 'events_per_page');
     }
-    
+
     /**
-	 * when user press on events plugin from settings menu
-	 *
-	 * get settings view
+     * when user press on events plugin from settings menu
      *
-	 * @since    1.0.0
+     * get settings view
+     *
+     * @since    1.0.0
      * @access   public
-	 */
+     */
     public function render_settings_page()
     {
-        require_once(PLUGIN_PATH_INCLUDES_ADMIN.'setting.php');
+        require_once (PLUGIN_PATH_INCLUDES_ADMIN . 'setting.php');
     }
-    
+
     /**
-	 * add new post to wp_posts
-	 *
-	 * add new post to view data at front end
+     * add new post to wp_posts
      *
-	 * @since    1.0.0
+     * add new post to view data at front end
+     *
+     * @since    1.0.0
      * @access   public
-	 */
+     */
     public function create_new_post()
     {
-       // praparing array for my post   
+        // praparing array for my post
         $my_post = array(
-          'post_title'    => "events",
-          'post_content'  => "[events_page]",
-          'post_status'   => 'publish',
-          'post_type' => "page",
-          'post_name' => "my_events"    
+            'post_title' => "events",
+            'post_content' => "[events_page]",
+            'post_status' => 'publish',
+            'post_type' => "page",
+            'post_name' => "my_events"
         );
 
         // Insert the post into the database
-        $event_id = wp_insert_post( $my_post );
-        add_option("event_page_id",$event_id);
-    }    
+        $event_id = wp_insert_post($my_post);
+        add_option("event_page_id", $event_id);
+    }
 
-    
 }
-
 

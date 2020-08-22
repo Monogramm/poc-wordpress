@@ -10,15 +10,15 @@
             <!-- form start -->
 
             <?php
-            if(isset($messageError))
-            {
-                echo "<div class='alert alert-danger'><strong>Error : ".$messageError."</strong></div>";
-            }
-            if(isset($messageSuccess))
-            {
-                echo "<div class='alert alert-success'><strong>".$messageSuccess."</strong></div>";
-            }
-            ?>
+if (isset($messageError))
+{
+    echo "<div class='alert alert-danger'><strong>Error : " . $messageError . "</strong></div>";
+}
+if (isset($messageSuccess))
+{
+    echo "<div class='alert alert-success'><strong>" . $messageSuccess . "</strong></div>";
+}
+?>
               <div class="box-body">
                 <div class="form-group">
                   <label for="inputTitle">Title</label>
