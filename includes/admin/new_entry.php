@@ -1,5 +1,4 @@
 <div class="container">
-   <div class="row">
     <form method="post" enctype="multipart/form-data">
         <div class="box box-primary">
             <div class="box-header with-border">
@@ -73,7 +72,7 @@
     </div>
                     
     </form>    
-</div>
+
 
 
 <script type="text/javascript">
