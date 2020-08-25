@@ -234,8 +234,8 @@ class eventsAdmin extends eventsCrud
      */
     public function load_custom_css()
     {
-        wp_register_style('bootstrap_css', PLUGIN_URL_VENDOR . '/bootstrap-3.3.6-dist/css/bootstrap.min.css');
-        wp_enqueue_style('bootstrap_css');
+        wp_register_style('style_css', PLUGIN_URL_VENDOR . '/tag/style.css');
+        wp_enqueue_style('style_css');
         wp_register_style('tags_css', PLUGIN_URL_VENDOR . '/tag/tag.css');
         wp_enqueue_style('tags_css');
     }
