@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\TestCase;
+namespace Unit\Tests;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use Tests\TestCase;
 
-class TestCase extends TestCase
+class ExampleTest extends TestCase
 {
     /**
      * A basic test example.
